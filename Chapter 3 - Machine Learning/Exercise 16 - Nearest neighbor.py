@@ -18,23 +18,25 @@ def dist(a, b):
         sum = sum + (ai - bi)**2
     return np.sqrt(sum)
 
-
 def main(X_train, X_test, y_train, y_test):
     global y_predict
     global lines
     k = 3
 
     for i, test_item in enumerate(X_test):
-
         distances = [dist(train_item, test_item) for train_item in X_train]
-
-        print(distances)
         nearest_indices = np.argsort(distances)
-        print(nearest_indices)
         nearest_labels = y_train[nearest_indices[:k]]
-        print(nearest_labels)
+        
+        # Count the occurrences of each label in nearest_labels
+        label_counts = np.bincount(nearest_labels)
+        
+        # Choose the label with the highest count as the predicted label
+        predicted_label = np.argmax(label_counts)
+        
+        y_predict[i] = predicted_label
 
-        y_predict[i] = np.round(np.mean(nearest_labels))
     print(y_predict)
+
 
 main(X_train, X_test, y_train, y_test)
